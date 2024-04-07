@@ -3,13 +3,10 @@ const { Builder, By, Key, until } = require('selenium-webdriver');
 async function rosetkaSearchTest() {
     let driver = await new Builder().forBrowser('chrome').build();
     try {
-        
         // Перейти на сторінку Розетка
         await driver.get('https://rozetka.com.ua/');
-
-        // Очікування видимості попапу та натискання на кнопку "Так"
-        let popup = await driver.wait(until.elementLocated(By.id('rz-banner-yes')), 5000);
-        await popup.click();
+        
+       
 
         // Шукати товар за ключовими словами
         let searchBox = await driver.findElement(By.xpath("//input[@name='search']"));
@@ -17,7 +14,11 @@ async function rosetkaSearchTest() {
 
         // Очікування результатів пошуку
         await driver.wait(until.elementLocated(By.className('goods-tile')), 5000);
-
+        // Очікування видимості попапу та натискання на кнопку "Так"
+        
+         //let popup = await driver.wait(until.elementLocated(By.id('rz-banner-yes')), 5000);
+         let popup = await driver.wait(until.elementLocated(By.className('button button--medium popup-content__button button--green ng-star-inserted')), 5000);
+         await popup.click();
         // Перевірка наявності результатів
         let searchResults = await driver.findElements(By.className('goods-tile'));
         if (searchResults.length > 0) {
@@ -37,6 +38,7 @@ async function rosetkaSearchTest() {
         console.log('Ціна другого товару:', secondProductPrice);
 
     } finally {
+        // Закриття веб-драйвера
         await driver.quit();
     }
 }
